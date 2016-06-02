@@ -45,8 +45,13 @@ class CanvasViewController: UIViewController, UIGestureRecognizerDelegate {
         if sender.state == UIGestureRecognizerState.Began {
             trayOriginalCenter = trayView.center
         } else if sender.state == UIGestureRecognizerState.Changed {
+            
+            var translationAmount = translation.y
+            if trayOriginalCenter.y + translation.y <= trayUp.y {
+                translationAmount *= 0.1
+            }
          
-            trayView.center = CGPoint(x: trayOriginalCenter.x, y: trayOriginalCenter.y + translation.y)
+            trayView.center = CGPoint(x: trayOriginalCenter.x, y: trayOriginalCenter.y + translationAmount)
             
             let rotation = convertValue(trayView.center.y, r1Min: trayDown.y, r1Max: trayUp.y, r2Min: 180, r2Max: 0)
 
@@ -54,13 +59,13 @@ class CanvasViewController: UIViewController, UIGestureRecognizerDelegate {
             
         } else if sender.state == UIGestureRecognizerState.Ended {
             if velocity.y > 0 {
-                UIView.animateWithDuration(0.8, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 20, options: [], animations: { () -> Void in
+                UIView.animateWithDuration(0.3, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 20, options: [], animations: { () -> Void in
                         self.trayView.center = self.trayDown
                         self.trayArrow.transform = CGAffineTransformMakeRotation(180 * CGFloat(M_PI/180))
                     }, completion: nil)
                 
             }else {
-                UIView.animateWithDuration(0.8, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 10, options: [], animations: { () -> Void in
+                UIView.animateWithDuration(0.3, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 10, options: [], animations: { () -> Void in
                     self.trayView.center = self.trayUp
                     self.trayArrow.transform = CGAffineTransformMakeRotation(0 * CGFloat(M_PI/180))
                 }, completion: nil)

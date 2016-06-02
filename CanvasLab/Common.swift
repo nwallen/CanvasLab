@@ -54,6 +54,7 @@ func associateObject<ValueType: AnyObject>(
 
 class OriginalCoordinates {
     var center: CGPoint!
+    var size: CGSize!
 }
 
 private var orginalCoordinatesKey: UInt8 = 0

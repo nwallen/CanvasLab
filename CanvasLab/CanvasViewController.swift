@@ -23,6 +23,7 @@ class CanvasViewController: UIViewController, UIGestureRecognizerDelegate {
     
     var newlyCreatedFace: UIImageView!
     var newlyCreatedFaceOriginalCenter: CGPoint!
+    var newlyCreatedFaceOriginalScale: CGFloat!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,8 +40,8 @@ class CanvasViewController: UIViewController, UIGestureRecognizerDelegate {
     }
 
     @IBAction func didPanTray(sender: AnyObject) {
-        var translation = sender.translationInView(view)
-        var velocity = sender.velocityInView(view)
+        let translation = sender.translationInView(view)
+        let velocity = sender.velocityInView(view)
         
         if sender.state == UIGestureRecognizerState.Began {
             trayOriginalCenter = trayView.center
@@ -76,27 +77,25 @@ class CanvasViewController: UIViewController, UIGestureRecognizerDelegate {
     
     @IBAction func didPanFace(sender: AnyObject) {
         
-        var translation = sender.translationInView(view)
+        let translation = sender.translationInView(view)
         
         if sender.state == UIGestureRecognizerState.Began {
             
-            var imageView = sender.view as! UIImageView
+            let imageView = sender.view as! UIImageView
             newlyCreatedFace = UIImageView(image: imageView.image)
             view.addSubview(newlyCreatedFace)
             newlyCreatedFace.center = imageView.center
             newlyCreatedFace.center.y += trayView.frame.origin.y
             newlyCreatedFace.originalCoordinates.center = imageView.center
+            newlyCreatedFace.originalCoordinates.size = imageView.image!.size
     
             newlyCreatedFaceOriginalCenter = newlyCreatedFace.center
-            
-            UIView.animateWithDuration(0.2){
-                self.newlyCreatedFace.transform = CGAffineTransformMakeScale(1.3, 1.3)
-            }
             
             let panGestureRecognizer = UIPanGestureRecognizer(target: self, action: "onCustomPan:")
             let pinchGestureRecognizer = UIPinchGestureRecognizer(target: self, action: "onCustomPinch:")
             let rotateGestureRecognizer = UIRotationGestureRecognizer(target: self, action: "onCustomRotate:")
             let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: "onCustomTap:")
+            
             tapGestureRecognizer.numberOfTapsRequired = 2
             pinchGestureRecognizer.delegate = self
             
@@ -105,6 +104,10 @@ class CanvasViewController: UIViewController, UIGestureRecognizerDelegate {
             newlyCreatedFace.addGestureRecognizer(pinchGestureRecognizer)
             newlyCreatedFace.addGestureRecognizer(rotateGestureRecognizer)
             newlyCreatedFace.addGestureRecognizer(tapGestureRecognizer)
+            
+            UIView.animateWithDuration(0.2){
+                self.newlyCreatedFace.transform = CGAffineTransformMakeScale(1.3, 1.3)
+            }
             
         } else if sender.state == UIGestureRecognizerState.Changed {
             
@@ -138,27 +141,27 @@ class CanvasViewController: UIViewController, UIGestureRecognizerDelegate {
         }
     }
     
-    func snapFaceToTray(faceView: UIImageView) {
-        if faceView.center.y > trayView.frame.origin.y{
-            UIView.animateWithDuration(0.2, animations: { () -> Void in
-                faceView.center =  CGPoint(x: faceView.originalCoordinates.center.x + self.trayView.frame.origin.x, y: faceView.originalCoordinates.center.y + self.trayView.frame.origin.y)
-                    faceView.transform = CGAffineTransformMakeScale(1, 1)
-                }, completion: { (Bool) -> Void in
-                    faceView.removeFromSuperview()
-            })
-            
-        }
-    }
-    
     func onCustomPan(sender: UIPanGestureRecognizer) {
         let translation = sender.translationInView(view)
         
         if sender.state == UIGestureRecognizerState.Began {
             newlyCreatedFace = sender.view as! UIImageView
             newlyCreatedFaceOriginalCenter = newlyCreatedFace.center
+            newlyCreatedFaceOriginalScale = newlyCreatedFace.frame.width / newlyCreatedFace.originalCoordinates.size.width
+            
+            UIView.animateWithDuration(0.2){
+                self.newlyCreatedFace.transform = CGAffineTransformMakeScale(self.newlyCreatedFaceOriginalScale + 0.3, self.newlyCreatedFaceOriginalScale + 0.3)
+            }
+            
         } else if sender.state == UIGestureRecognizerState.Changed {
             newlyCreatedFace.center = CGPoint(x: newlyCreatedFaceOriginalCenter.x + translation.x, y: newlyCreatedFaceOriginalCenter.y + translation.y)
         } else if sender.state == UIGestureRecognizerState.Ended {
+            
+            
+            UIView.animateWithDuration(0.2){
+                self.newlyCreatedFace.transform = CGAffineTransformMakeScale(self.newlyCreatedFaceOriginalScale, self.newlyCreatedFaceOriginalScale)
+            }
+            
             snapFaceToTray(newlyCreatedFace)
         }
     }
@@ -181,15 +184,17 @@ class CanvasViewController: UIViewController, UIGestureRecognizerDelegate {
         return true
     }
     
-    
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    func snapFaceToTray(faceView: UIImageView) {
+        if faceView.center.y > trayView.frame.origin.y{
+            UIView.animateWithDuration(0.2, animations: { () -> Void in
+                faceView.center =  CGPoint(x: faceView.originalCoordinates.center.x + self.trayView.frame.origin.x, y: faceView.originalCoordinates.center.y + self.trayView.frame.origin.y)
+                faceView.transform = CGAffineTransformMakeScale(1, 1)
+                }, completion: { (Bool) -> Void in
+                    faceView.removeFromSuperview()
+            })
+            
+        }
     }
-    */
+    
 
 }

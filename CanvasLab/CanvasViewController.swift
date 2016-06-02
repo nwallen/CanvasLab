@@ -96,13 +96,15 @@ class CanvasViewController: UIViewController, UIGestureRecognizerDelegate {
             let panGestureRecognizer = UIPanGestureRecognizer(target: self, action: "onCustomPan:")
             let pinchGestureRecognizer = UIPinchGestureRecognizer(target: self, action: "onCustomPinch:")
             let rotateGestureRecognizer = UIRotationGestureRecognizer(target: self, action: "onCustomRotate:")
+            let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: "onCustomTap:")
+            tapGestureRecognizer.numberOfTapsRequired = 2
             pinchGestureRecognizer.delegate = self
             
             newlyCreatedFace.userInteractionEnabled = true
             newlyCreatedFace.addGestureRecognizer(panGestureRecognizer)
             newlyCreatedFace.addGestureRecognizer(pinchGestureRecognizer)
             newlyCreatedFace.addGestureRecognizer(rotateGestureRecognizer)
-            
+            newlyCreatedFace.addGestureRecognizer(tapGestureRecognizer)
             
         } else if sender.state == UIGestureRecognizerState.Changed {
             
@@ -112,8 +114,14 @@ class CanvasViewController: UIViewController, UIGestureRecognizerDelegate {
             UIView.animateWithDuration(0.2){
                 self.newlyCreatedFace.transform = CGAffineTransformMakeScale(1, 1)
             }
+            snapFaceToTray(newlyCreatedFace)
         }
             
+    }
+    
+    func onCustomTap(sender: UITapGestureRecognizer) {
+        newlyCreatedFace = sender.view as! UIImageView
+        newlyCreatedFace.removeFromSuperview()
     }
     
     func onCustomRotate(sender: UIRotationGestureRecognizer) {
@@ -130,6 +138,18 @@ class CanvasViewController: UIViewController, UIGestureRecognizerDelegate {
         }
     }
     
+    func snapFaceToTray(faceView: UIImageView) {
+        if faceView.center.y > trayView.frame.origin.y{
+            UIView.animateWithDuration(0.2, animations: { () -> Void in
+                faceView.center =  CGPoint(x: faceView.originalCoordinates.center.x + self.trayView.frame.origin.x, y: faceView.originalCoordinates.center.y + self.trayView.frame.origin.y)
+                    faceView.transform = CGAffineTransformMakeScale(1, 1)
+                }, completion: { (Bool) -> Void in
+                    faceView.removeFromSuperview()
+            })
+            
+        }
+    }
+    
     func onCustomPan(sender: UIPanGestureRecognizer) {
         let translation = sender.translationInView(view)
         
@@ -139,15 +159,7 @@ class CanvasViewController: UIViewController, UIGestureRecognizerDelegate {
         } else if sender.state == UIGestureRecognizerState.Changed {
             newlyCreatedFace.center = CGPoint(x: newlyCreatedFaceOriginalCenter.x + translation.x, y: newlyCreatedFaceOriginalCenter.y + translation.y)
         } else if sender.state == UIGestureRecognizerState.Ended {
-            if newlyCreatedFace.center.y > trayView.frame.origin.y{
-                UIView.animateWithDuration(0.2, animations: { () -> Void in
-                    self.newlyCreatedFace.center =  CGPoint(x: self.newlyCreatedFace.originalCoordinates.center.x + self.trayView.frame.origin.x, y: self.newlyCreatedFace.originalCoordinates.center.y + self.trayView.frame.origin.y)
-                    self.newlyCreatedFace.transform = CGAffineTransformMakeScale(1, 1)
-                }, completion: { (Bool) -> Void in
-                        self.newlyCreatedFace.removeFromSuperview()
-                })
-                
-            }
+            snapFaceToTray(newlyCreatedFace)
         }
     }
     

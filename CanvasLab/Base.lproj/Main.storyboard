@@ -82,6 +82,7 @@
                     <connections>
                         <outlet property="trayArrow" destination="wVJ-GV-jUP" id="57O-Ty-1By"/>
                         <outlet property="trayView" destination="tVk-65-IML" id="TiB-fC-Ocw"/>
+                        <outletCollection property="faces" destination="9RV-ac-8Ig" collectionClass="NSMutableArray" id="VWl-LC-tce"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>

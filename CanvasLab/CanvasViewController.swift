@@ -7,11 +7,13 @@
 //
 
 import UIKit
-
+ 
 class CanvasViewController: UIViewController, UIGestureRecognizerDelegate {
 
     @IBOutlet weak var trayView: UIView!
     @IBOutlet weak var trayArrow: UIImageView!
+    
+    @IBOutlet var faces: [UIImageView]!
     
     var trayOriginalCenter: CGPoint!
     var trayDownOffset: CGFloat!
@@ -66,6 +68,7 @@ class CanvasViewController: UIViewController, UIGestureRecognizerDelegate {
         }
     }
     
+    
     @IBAction func didPanFace(sender: AnyObject) {
         
         var translation = sender.translationInView(view)
@@ -77,8 +80,8 @@ class CanvasViewController: UIViewController, UIGestureRecognizerDelegate {
             view.addSubview(newlyCreatedFace)
             newlyCreatedFace.center = imageView.center
             newlyCreatedFace.center.y += trayView.frame.origin.y
-            
-            
+            newlyCreatedFace.originalCoordinates.center = imageView.center
+    
             newlyCreatedFaceOriginalCenter = newlyCreatedFace.center
             
             UIView.animateWithDuration(0.2){
@@ -131,6 +134,15 @@ class CanvasViewController: UIViewController, UIGestureRecognizerDelegate {
         } else if sender.state == UIGestureRecognizerState.Changed {
             newlyCreatedFace.center = CGPoint(x: newlyCreatedFaceOriginalCenter.x + translation.x, y: newlyCreatedFaceOriginalCenter.y + translation.y)
         } else if sender.state == UIGestureRecognizerState.Ended {
+            if newlyCreatedFace.center.y > trayView.frame.origin.y{
+                UIView.animateWithDuration(0.2, animations: { () -> Void in
+                    self.newlyCreatedFace.center =  CGPoint(x: self.newlyCreatedFace.originalCoordinates.center.x + self.trayView.frame.origin.x, y: self.newlyCreatedFace.originalCoordinates.center.y + self.trayView.frame.origin.y)
+                    self.newlyCreatedFace.transform = CGAffineTransformMakeScale(1, 1)
+                }, completion: { (Bool) -> Void in
+                        self.newlyCreatedFace.removeFromSuperview()
+                })
+                
+            }
         }
     }
     

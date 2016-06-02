@@ -23,7 +23,6 @@ class CanvasViewController: UIViewController, UIGestureRecognizerDelegate {
     
     var newlyCreatedFace: UIImageView!
     var newlyCreatedFaceOriginalCenter: CGPoint!
-    var newlyCreatedFaceOriginalScale: CGFloat!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -51,8 +50,6 @@ class CanvasViewController: UIViewController, UIGestureRecognizerDelegate {
             if translationAmount <= trayUp.y {
                 translationAmount = trayUp.y + translation.y * 0.1
             }
-         
-            print(translationAmount)
             
             trayView.center = CGPoint(x: trayOriginalCenter.x, y: translationAmount)
             
@@ -149,19 +146,17 @@ class CanvasViewController: UIViewController, UIGestureRecognizerDelegate {
         if sender.state == UIGestureRecognizerState.Began {
             newlyCreatedFace = sender.view as! UIImageView
             newlyCreatedFaceOriginalCenter = newlyCreatedFace.center
-            newlyCreatedFaceOriginalScale = newlyCreatedFace.frame.width / newlyCreatedFace.originalCoordinates.size.width
             
             UIView.animateWithDuration(0.2){
-                self.newlyCreatedFace.transform = CGAffineTransformMakeScale(self.newlyCreatedFaceOriginalScale + 0.3, self.newlyCreatedFaceOriginalScale + 0.3)
+                self.newlyCreatedFace.transform = CGAffineTransformScale( self.newlyCreatedFace.transform, 1.2, 1.2)
             }
             
         } else if sender.state == UIGestureRecognizerState.Changed {
             newlyCreatedFace.center = CGPoint(x: newlyCreatedFaceOriginalCenter.x + translation.x, y: newlyCreatedFaceOriginalCenter.y + translation.y)
         } else if sender.state == UIGestureRecognizerState.Ended {
-            
-            
+    
             UIView.animateWithDuration(0.2){
-                self.newlyCreatedFace.transform = CGAffineTransformMakeScale(self.newlyCreatedFaceOriginalScale, self.newlyCreatedFaceOriginalScale)
+                self.newlyCreatedFace.transform = CGAffineTransformScale(self.newlyCreatedFace.transform, 0.83, 0.83)
             }
             
             snapFaceToTray(newlyCreatedFace)

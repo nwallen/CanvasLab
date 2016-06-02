@@ -14,6 +14,8 @@
 		B11CD8491CFFB9C10094C938 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B11CD8471CFFB9C10094C938 /* LaunchScreen.storyboard */; };
 		B11CD8541CFFB9C10094C938 /* CanvasLabTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B11CD8531CFFB9C10094C938 /* CanvasLabTests.swift */; };
 		B11CD85F1CFFB9C10094C938 /* CanvasLabUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B11CD85E1CFFB9C10094C938 /* CanvasLabUITests.swift */; };
+		B11CD86D1CFFBA9A0094C938 /* CanvasViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B11CD86C1CFFBA9A0094C938 /* CanvasViewController.swift */; };
+		B11CD86F1CFFEC110094C938 /* Common.swift in Sources */ = {isa = PBXBuildFile; fileRef = B11CD86E1CFFEC110094C938 /* Common.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,6 +49,8 @@
 		B11CD85A1CFFB9C10094C938 /* CanvasLabUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CanvasLabUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B11CD85E1CFFB9C10094C938 /* CanvasLabUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanvasLabUITests.swift; sourceTree = "<group>"; };
 		B11CD8601CFFB9C10094C938 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B11CD86C1CFFBA9A0094C938 /* CanvasViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CanvasViewController.swift; sourceTree = "<group>"; };
+		B11CD86E1CFFEC110094C938 /* Common.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Common.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -98,11 +102,13 @@
 			isa = PBXGroup;
 			children = (
 				B11CD83E1CFFB9C10094C938 /* AppDelegate.swift */,
+				B11CD86E1CFFEC110094C938 /* Common.swift */,
 				B11CD8401CFFB9C10094C938 /* ViewController.swift */,
 				B11CD8421CFFB9C10094C938 /* Main.storyboard */,
 				B11CD8451CFFB9C10094C938 /* Assets.xcassets */,
 				B11CD8471CFFB9C10094C938 /* LaunchScreen.storyboard */,
 				B11CD84A1CFFB9C10094C938 /* Info.plist */,
+				B11CD86C1CFFBA9A0094C938 /* CanvasViewController.swift */,
 			);
 			path = CanvasLab;
 			sourceTree = "<group>";
@@ -256,7 +262,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B11CD86F1CFFEC110094C938 /* Common.swift in Sources */,
 				B11CD8411CFFB9C10094C938 /* ViewController.swift in Sources */,
+				B11CD86D1CFFBA9A0094C938 /* CanvasViewController.swift in Sources */,
 				B11CD83F1CFFB9C10094C938 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

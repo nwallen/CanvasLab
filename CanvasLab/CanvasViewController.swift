@@ -47,12 +47,14 @@ class CanvasViewController: UIViewController, UIGestureRecognizerDelegate {
             trayOriginalCenter = trayView.center
         } else if sender.state == UIGestureRecognizerState.Changed {
             
-            var translationAmount = translation.y
-            if trayOriginalCenter.y + translation.y <= trayUp.y {
-                translationAmount *= 0.1
+            var translationAmount = trayOriginalCenter.y + translation.y
+            if translationAmount <= trayUp.y {
+                translationAmount = trayUp.y + translation.y * 0.1
             }
          
-            trayView.center = CGPoint(x: trayOriginalCenter.x, y: trayOriginalCenter.y + translationAmount)
+            print(translationAmount)
+            
+            trayView.center = CGPoint(x: trayOriginalCenter.x, y: translationAmount)
             
             let rotation = convertValue(trayView.center.y, r1Min: trayDown.y, r1Max: trayUp.y, r2Min: 180, r2Max: 0)
 
